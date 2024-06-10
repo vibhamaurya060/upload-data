@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log Dashboard</title>
     <style>
-        body { font-family: Arial, sans-serif; }
+        body { font-family: Arial, sans-serif; padding-left: 400px; padding-top: 100px; }
         .log { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
         .warn { background-color: #fff3cd; }
         .info { background-color: #d1ecf1; }
@@ -26,7 +26,7 @@
     <div id="logContainer"></div>
 
     <h2>Submit Data</h2>
-    <form id="dataForm">
+    <form id="dataForm" style="height: 400px; width: 400px; background-color: #b8e4f8; padding: 50px;">
         <label for="id">ID:</label><br>
         <input type="number" id="id" name="id"><br>
         <label for="name">Name:</label><br>
@@ -78,10 +78,9 @@
 
             const result = await response.json();
             alert(result.message);
-            fetchLogs(); // Refresh logs
+            fetchLogs(); 
         }
 
-        // Fetch all logs on page load
         fetchLogs();
     </script>
 </body>
