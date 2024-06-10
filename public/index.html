@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .log { margin: 10px 0; padding: 10px; border: 1px solid #ccc; }
+        .warn { background-color: #fff3cd; }
+        .info { background-color: #d1ecf1; }
+        .error { background-color: #f8d7da; }
+        .success { background-color: #d4edda; }
+    </style>
+</head>
+<body>
+    <h1>Log Dashboard</h1>
+    <select id="logType">
+        <option value="">All</option>
+        <option value="warn">Warn</option>
+        <option value="info">Info</option>
+        <option value="error">Error</option>
+        <option value="success">Success</option>
+    </select>
+    <button onclick="fetchLogs()">Filter Logs</button>
+    <div id="logContainer"></div>
+
+    <h2>Submit Data</h2>
+    <form id="dataForm">
+        <label for="id">ID:</label><br>
+        <input type="number" id="id" name="id"><br>
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="score">Score:</label><br>
+        <input type="number" id="score" name="score"><br>
+        <label for="age">Age:</label><br>
+        <input type="number" id="age" name="age"><br>
+        <label for="city">City:</label><br>
+        <input type="text" id="city" name="city"><br>
+        <label for="gender">Gender:</label><br>
+        <input type="text" id="gender" name="gender"><br>
+        <button type="button" onclick="submitData()">Submit</button>
+    </form>
+
+    <script>
+        async function fetchLogs() {
+            const logType = document.getElementById('logType').value;
+            const response = await fetch(`/logs?type=${logType}`);
+            const logs = await response.json();
+            const logContainer = document.getElementById('logContainer');
+            logContainer.innerHTML = '';
+            logs.forEach(log => {
+                const logDiv = document.createElement('div');
+                logDiv.className = `log ${log.type}`;
+                logDiv.textContent = log.message;
+                logContainer.appendChild(logDiv);
+            });
+        }
+
+        async function submitData() {
+            const form = document.getElementById('dataForm');
+            const data = {
+                id: form.id.value,
+                name: form.name.value,
+                score: form.score.value,
+                age: form.age.value,
+                city: form.city.value,
+                gender: form.gender.value
+            };
+
+            const response = await fetch('/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            fetchLogs(); // Refresh logs
+        }
+
+        // Fetch all logs on page load
+        fetchLogs();
+    </script>
+</body>
+</html>
